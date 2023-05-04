@@ -3,22 +3,16 @@ const app = express();
 const port = 8000;
 const {faker} = require("@faker-js/faker")
 
-const userObject = () => {
-  const newUser = {
+const userObject = () => ({
     employeeId: faker.datatype.number(),
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     phoneNumber: faker.phone.number(),
     email: faker.internet.email(),
     password: faker.internet.password()
-  };
-  return newUser
-};
-const newUserObject = userObject();
-console.log(newUserObject);
+});
 
-const compObject = () => {
-  const newComp = {
+const compObject = () => ({
     companyId: faker.datatype.number(),
     companyName: faker.company.name(),
     address: {
@@ -28,31 +22,18 @@ const compObject = () => {
       zipCode: faker.address.zipCode(),
       country: faker.address.country()
     }
-  };
-  return newComp
-};
-const newCompObj = compObject();
-console.log(newCompObj);
-
-const userComp = {
-  ...newUserObject,
-  ...newCompObj
-};
-console.log(userComp);
+});
 
 app.get("/api/users/new", (req, res) => {
-  res.json(newUserObject)
+  res.json(userObject())
 });
 
 app.get("/api/companies/new", (req, res) => {
-  res.json(newCompObj)
+  res.json(compObject())
 });
 
 app.get("/api/user/company", (req, res) => {
-  res.json(userComp)
+  res.json({user: userObject(), company: compObject()})
 });
-
-
-
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
